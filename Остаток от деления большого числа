@@ -1,0 +1,11 @@
+#include <iostream>
+
+int main() {
+    int K, ost = 0;
+    char a;
+    std::cin >> K;
+    while (std::cin >> a) {
+        ost = (ost * 10 + static_cast<int>(a) - static_cast<int>('0')) % K;
+    }
+    std::cout << ost;
+}
