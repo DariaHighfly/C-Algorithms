@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+
+void Dist(const std::vector<std::vector<int>>& vec, std::vector<int>& node,
+    std::vector<int>& parent, std::vector<bool>& was) {
+        size_t i;
+        int min, path;
+        for (int m = 1; m != vec.size(); ++m) {
+            path = vec.size() + 2;
+            for (i = 1; i != vec.size(); ++i) {
+                if (was[i] == false && node[i] < path) {
+                    path = node[i];
+                    min = i;
+                }
+            }
+            was[min] = true;
+            for (i = 1; i != vec.size(); ++i) {
+                if (vec[min][i] != 0) {
+                    if (path < node[i]) {
+                        parent[i] = min;
+                        node[i] = node[min] + 1;;
+                    }
+                }
+            }
+        }
+}
+
+int main() {
+    int N, start, finish, path = 0, m;
+    size_t i, j;
+    std::cin >> N;
+    std::vector<bool> was(N + 1);
+    std::vector<int> res;
+    std::vector<int> parent(N + 1);
+    std::vector<int> node(N + 1);
+    std::vector<std::vector<int>> vec(N + 1, std::vector<int> (N + 1));
+    for (i = 1; i != N + 1; ++i) {
+        for (j = 1; j != N + 1; ++j) {
+            std::cin >> vec[i][j];
+        }
+    }
+    for (i = 1; i != N + 1; ++i) {
+        node[i] = N + 2;
+    }
+    for (i = 1; i != N + 1; ++i) {
+        was[i] = false;
+    }
+    std::cin >> start >> finish;
+    node[start] =  0;
+    parent[start] =  -1;
+    if (finish != start) {
+        m = finish;
+        Dist(vec, node, parent, was);
+        if (node[finish] == N + 2) {
+            std::cout << -1;
+        } else {
+            while (m != start) {
+                res.push_back(m);
+                m = parent[m];
+            }
+            res.push_back(start);
+            std::cout << res.size() - 1 << "\n";
+            for (i = 0; i != res.size(); ++i) {
+                std::cout << res[res.size() - i - 1] << ' ';
+            }
+        }
+    } else {
+        std::cout << 0;
+    }
+}
