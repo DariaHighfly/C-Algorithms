@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <set>
+
+
+void What_to_cout(std::vector<std::set<int>> &vec, std::set<int> &myset,
+    std::set<int> &nodes, int k, int k2) {
+    if (nodes.find(k2) != nodes.end()) {
+        nodes.erase(k2);
+        myset.insert(k2);
+        for (auto m = vec[k2].begin(); m != vec[k2].end(); ++m) {
+            if (nodes.find(*m) != nodes.end()) {
+                What_to_cout(vec, myset, nodes, k, *m);
+            }
+        }
+    }
+}
+
+int main() {
+    int N, M, i, a, b, com = 0;
+    std::cin >> N >> M;
+    std::vector<std::set<int>> vec(N + 1);
+    std::vector<std::set<int>> res;
+    std::set<int> myset;
+    std::set<int> nodes;
+    for (i = 1; i != N + 1; ++i) {
+        nodes.insert(i);
+    }
+    for (i = 0; i != M; ++i) {
+        std::cin >> a >> b;
+        vec[a].insert(a);
+        vec[a].insert(b);
+        vec[b].insert(a);
+        vec[b].insert(b);
+    }
+     /* for (i = 1; i != N + 1; ++i) {
+        for (auto m = vec[i].begin(); m != vec[i].end(); ++m) {
+            std::cout << *m << ' ';
+        }
+        std::cout << "\n";
+    } */
+
+    for (i = 1; i != N + 1; ++i) {
+        if (nodes.find(i) != nodes.end()) {
+            ++com;
+            What_to_cout(vec, myset, nodes, i, i);
+            res.push_back(myset);
+            myset.clear();
+        }
+    }
+    for (std::set<int>::iterator m = nodes.begin(); m != nodes.end(); ++m) {
+        if (*m != 0) {
+            ++com;
+            myset.insert(*m);
+            res.push_back(myset);
+            myset.clear();
+        }
+    }
+    std::cout << com << "\n";
+    for (i = 0; i != res.size(); ++i) {
+        std::cout << res[i].size() << "\n";
+        for (std::set<int>::iterator m = res[i].begin(); m != res[i].end(); ++m) {
+                std::cout << *m << ' ';
+        }
+        std::cout << "\n";
+    }
+}
