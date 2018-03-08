@@ -1,0 +1,68 @@
+#include <iostream>
+#include <memory>
+#include <math.h>
+
+class Tree{
+ private:
+     struct Node {
+        int elem;
+        Tree* left;
+        Tree* right;
+     };
+     Node a;
+
+ public:
+    explicit Tree(int x) { // explicit  позволяет создавать объекты класса только так: y = Tree(x)
+        a.elem = x;
+        a.left = nullptr;
+        a.right = nullptr;
+    }
+
+    void Add_to_tree(int x) {
+        if (a.elem < x) {
+            if (a.left == nullptr) {
+                a.left = new Tree (x);
+            } else {
+                a.left -> Add_to_tree(x);
+            }
+        } else if (a.elem > x) {
+            if (a.right == nullptr) {
+                a.right = new Tree (x);
+            } else {
+                a.right -> Add_to_tree(x);
+            }
+        }
+    }
+
+    int Find_height() {
+        int l, r;
+        if (a.left == nullptr) {
+            l = 0;
+        } else {
+            l = a.left -> Find_height();
+        }
+        if (a.right == nullptr) {
+            r = 0;
+        } else {
+            r = a.right -> Find_height();
+        }
+        return std::max(l, r) + 1;
+    }
+
+    void Print_nodes() {
+        if (a.right != nullptr) a.right -> Print_nodes();
+        std::cout << a.elem << "\n";
+        if (a.left != nullptr) a.left -> Print_nodes();
+    }
+};
+
+int main() {
+    int x;
+    std::cin >> x;
+    Tree MyTree(x);
+    while (std::cin >> x) {
+        if (x == 0) break;
+        MyTree.Add_to_tree(x);
+    }
+    MyTree.Print_nodes(); // печатаем вершины в порядке возрастания
+}
