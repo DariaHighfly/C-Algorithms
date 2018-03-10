@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <utility>
+#include <algorithm>
+#include <set>
+
+int main() {
+    size_t i;
+    long long N, K, start, finish, len, to;
+    std::cin >> N >> K;
+    std::vector<long long> res(N + 1, 1000000000001);
+    std::vector<std::vector<std::pair<long long, long long>>> vec(N + 1);
+    for (i = 0; i != K; ++i) {
+        std::cin >> start >> finish >> len;
+        vec[start].push_back(std::make_pair(finish, len));
+        vec[finish].push_back(std::make_pair(start, len));
+    }
+    std::cin >> start >> finish;
+    if (finish != start) {
+        res[start] =  0;
+        std::set<std::pair<long long, long long>> S;
+        S.insert(std::make_pair(res[start], start));
+        while (!S.empty()) {
+            long long beg = S.begin()->second;
+            S.erase(S.begin());
+            for (i = 0; i != vec[beg].size(); ++i) {
+                to = vec[beg][i].first;
+                len = vec[beg][i].second;
+                if (res[beg] + len < res[to]) {
+                    S.erase(std::make_pair(res[to], to));
+                    res[to] = res[beg] + len;
+                    S.insert(std::make_pair(res[to], to));
+                }
+            }
+        }
+        if (res[finish] == 1000000000001) {
+            std::cout << -1;
+        } else {
+            std::cout << res[finish];
+        }
+    } else {
+        std::cout << 0;
+    }
+}
