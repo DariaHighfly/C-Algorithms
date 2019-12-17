@@ -1,2 +1,2 @@
-# Example_of_my_programm
-Example of my code(C++) is in Matrix.txt
+# C++ Algorithms
+Example of my code (C++) is in Matrix.txt and some algorithms in folder Algotithms
